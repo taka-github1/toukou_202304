@@ -115,30 +115,6 @@ if (param != null) {
   $('#kaishaid').val(999999);
 }
 
-let wakeLock = null;
-
-try {
-  wakeLock = navigator.wakeLock.request("screen").then((w) => {
-    wakeLock = w;
-    console.log("Wake Lock is active!");
-  });
-} catch (err) {
-  console.log(`${err.name}, ${err.message}`);
-}
-
-
-//端末のスリープ回避
-// document.addEventListener('click', function () {
-//   document.getElementById('sleep-prevent-video-ios').play();
-//   document.getElementById('sleep-prevent-video-android').play();
-// });
-
-// setInterval(function () {
-//   document.getElementById('sleep-prevent-video-ios').play();
-//   document.getElementById('sleep-prevent-video-android').play();
-// }, 20000);
-
-
 //configの読み込み
 var json_url = "./src/json/Setting.json";
 
@@ -185,6 +161,15 @@ if (navigator.userAgent.match(/iPhone|Android.+Mobile/)) {
   isMobile = true;
   $(".pconly").hide();
 }
+
+//Screen Wake Lock APIの有効化（サポート端末のみ）
+let wakeLock = null;
+try {
+  wakeLock = navigator.wakeLock.request("screen").then((w) => wakeLock = w);
+} catch (err) {
+  console.log(`${err.name}, ${err.message}`);
+}
+
 
 /*********************初期化処理*********************/
 
