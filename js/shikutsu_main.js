@@ -1201,7 +1201,7 @@ require([
                   $tr.find(".status").html("<span style='color:green;'>アップロード中(0%)</span><meter min='0' max='100' value='0'></meter>");
 
                   //修正中
-                  blob = blob.slice(0, 400000000);
+                  blob = blob.slice(0, 100000000);
 
 
                   // Blobデータを指定サイズで分割
