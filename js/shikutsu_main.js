@@ -1215,11 +1215,11 @@ require([
                   $tr.find(".status").html("<span style='color:green;'>アップロード中(0%)</span><meter min='0' max='100' value='0'></meter>");
 
                   //修正中
-                  // blob = blob.slice(0, 100000000);
-
 
                   // Blobデータを指定サイズで分割
-                  var blobs = func_split_blob(blob, blob_chunk_size);
+                  // var blobs = func_split_blob(blob, blob_chunk_size);
+                  var blobs = [blob];
+
                   // 分割アップロード開始
                   upload_blobs(blobs, {
                     // 分割要素ごとのAjaxパラメータの作成
