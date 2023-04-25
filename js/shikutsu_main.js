@@ -115,6 +115,17 @@ if (param != null) {
   $('#kaishaid').val(999999);
 }
 
+document.addEventListener('click', function () {
+  document.getElementById('sleep-prevent-video-ios').play();
+  document.getElementById('sleep-prevent-video-android').play();
+});
+
+setInterval(function () {
+  document.getElementById('sleep-prevent-video-ios').play();
+  document.getElementById('sleep-prevent-video-android').play();
+}, 20000);  // 20秒ごと
+
+
 //configの読み込み
 var json_url = "./src/json/Setting.json";
 
@@ -1175,8 +1186,7 @@ require([
               // console.log("files[" + i + "](read_file.then())");
               // 読み込みBlobデータ保持
               // var blob = args.event.target.result;
-              var blob = new Uint32Array(args.event.target.result);
-              // var blob = new Uint8Array(args.event.target.result);
+              var blob = new Uint8Array(args.event.target.result);
 
               $tr.find(".status").html("<span style='color:blue;'>登録中</span>");
               // アップロードファイル登録用Ajaxパラメータ作成
