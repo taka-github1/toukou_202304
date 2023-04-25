@@ -115,7 +115,16 @@ if (param != null) {
   $('#kaishaid').val(999999);
 }
 
-var noSleep = new NoSleep();
+navigator.getWakeLock('screen').then(wakelock => {
+  // リクエストを取得
+  const request = wakelock.createRequest();
+})
+  .catch(err => {
+    // 失敗
+    console.error(err);
+  });
+
+
 
 //端末のスリープ回避
 // document.addEventListener('click', function () {
