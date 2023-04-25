@@ -121,7 +121,7 @@ try {
   wakeLock = await navigator.wakeLock.request("screen");
   console.log("Wake Lock is active!");
 } catch (err) {
-  sconsole.log(`${err.name}, ${err.message}`);
+  console.log(`${err.name}, ${err.message}`);
 }
 
 
