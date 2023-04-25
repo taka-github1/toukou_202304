@@ -1082,11 +1082,10 @@ require([
 
     //Screen Wake Lock APIの有効化（サポート端末のみ）
     try {
-      wakeLock = navigator.wakeLock.request("screen").then((w) => wakeLock = w);
+      wakeLock = await navigator.wakeLock.request("screen");
     } catch (err) {
       console.log(`${err.name}, ${err.message}`);
     }
-
 
     callbacks = callbacks || {};
     // 非同期待ちフラグ
@@ -1380,6 +1379,7 @@ require([
       callbacks.hasExif(exifs);
     }
 
+    //Screen Wake Lock APIの無効化
     if (wakeLock) {
       wakeLock.release().then(() => {
         wakeLock = null;
