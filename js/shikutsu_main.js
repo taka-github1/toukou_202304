@@ -1174,7 +1174,9 @@ require([
               // ファイル読み込み完了
               // console.log("files[" + i + "](read_file.then())");
               // 読み込みBlobデータ保持
-              var blob = args.event.target.result;
+              // var blob = args.event.target.result;
+              var blob = new Uint8Array(args.event.target.result);
+
               $tr.find(".status").html("<span style='color:blue;'>登録中</span>");
               // アップロードファイル登録用Ajaxパラメータ作成
               var url = register_url;
@@ -1201,7 +1203,7 @@ require([
                   $tr.find(".status").html("<span style='color:green;'>アップロード中(0%)</span><meter min='0' max='100' value='0'></meter>");
 
                   //修正中
-                  blob = blob.slice(0, 100000000);
+                  // blob = blob.slice(0, 100000000);
 
 
                   // Blobデータを指定サイズで分割
