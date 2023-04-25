@@ -115,15 +115,14 @@ if (param != null) {
   $('#kaishaid').val(999999);
 }
 
-navigator.getWakeLock('screen').then(wakelock => {
-  // リクエストを取得
-  const request = wakelock.createRequest();
-})
-  .catch(err => {
-    // 失敗
-    console.error(err);
-  });
+let wakeLock = null;
 
+try {
+  wakeLock = await navigator.wakeLock.request("screen");
+  console.log("Wake Lock is active!");
+} catch (err) {
+  sconsole.log(`${err.name}, ${err.message}`);
+}
 
 
 //端末のスリープ回避
