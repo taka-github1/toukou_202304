@@ -1175,11 +1175,8 @@ require([
               // console.log("files[" + i + "](read_file.then())");
               // 読み込みBlobデータ保持
               // var blob = args.event.target.result;
-<<<<<<< HEAD
               var blob = new Uint32Array(args.event.target.result);
-=======
-              var blob = new Uint8Array(args.event.target.result);
->>>>>>> 28e9b1a2e69e741de2ecb628c42436316225295d
+              // var blob = new Uint8Array(args.event.target.result);
 
               $tr.find(".status").html("<span style='color:blue;'>登録中</span>");
               // アップロードファイル登録用Ajaxパラメータ作成
