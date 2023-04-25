@@ -1218,6 +1218,7 @@ require([
 
                   // Blobデータを指定サイズで分割
                   var blobs = func_split_blob(blob, blob_chunk_size);
+                  return;
 
                   // 分割アップロード開始
                   upload_blobs(blobs, {
