@@ -118,8 +118,10 @@ if (param != null) {
 let wakeLock = null;
 
 try {
-  wakeLock = await navigator.wakeLock.request("screen");
-  console.log("Wake Lock is active!");
+  wakeLock = navigator.wakeLock.request("screen").then((w) => {
+    wakeLock = w;
+    console.log("Wake Lock is active!");
+  });
 } catch (err) {
   console.log(`${err.name}, ${err.message}`);
 }
