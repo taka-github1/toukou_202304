@@ -1080,6 +1080,14 @@ require([
    */
   async function upload_files(files, selector_table, selector_select, selector_label, caption, callbacks) {
 
+    //Screen Wake Lock APIの有効化（サポート端末のみ）
+    try {
+      wakeLock = await navigator.wakeLock.request("screen");
+      alert("Screen Wake Lock API Support!");
+    } catch (err) {
+      alert(`${err.name}, ${err.message}`);
+    }
+
     callbacks = callbacks || {};
     // 非同期待ちフラグ
     var waiting = { status: false };
@@ -1124,15 +1132,6 @@ require([
           $tr.find("div.name").text(file.name);
           $tr.find("div.size").text(func_file_size(file.size));
           $tr.find("div.status").text("読込中");
-
-          //Screen Wake Lock APIの有効化（サポート端末のみ）
-          try {
-            navigator.wakeLock.request("screen").then((w) => wakeLock = w);
-            $tr.find("div.size").text("Screen Wake Lock API Support!");
-          } catch (err) {
-            $tr.find("div.size").text(`${err.name}, ${err.message}`)
-          }
-
           // 削除ボタンクリック
           $tr.find(".btn-del").click(function () {
             // console.log("files[" + i + "].btn-del.click()");
