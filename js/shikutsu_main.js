@@ -1217,8 +1217,7 @@ require([
                   //修正中
 
                   // Blobデータを指定サイズで分割
-                  // var blobs = func_split_blob(blob, blob_chunk_size);
-                  var blobs = [blob];
+                  var blobs = func_split_blob(blob, blob_chunk_size);
 
                   // 分割アップロード開始
                   upload_blobs(blobs, {
@@ -1423,15 +1422,21 @@ require([
    * @returns {Blob[]}
    */
   function func_split_blob(blob, chunk_size) {
-    // Blob分割数算出
-    var division_count = Math.ceil(blob.byteLength / chunk_size);
-    var offset = 0;
-    var blobs = new Array(division_count);
-    for (var i = 0; i < division_count; i++) {
-      // Blobを指定位置で指定長分割し、配列にセット(最終サイズをオーバーした場合は切り詰められる)
-      blobs.push(new Uint8Array(blob.slice(offset, offset + chunk_size)));
-      offset += chunk_size;
+    try {
+      // Blob分割数算出
+      var division_count = Math.ceil(blob.byteLength / chunk_size);
+      var offset = 0;
+      var blobs = new Array(division_count);
+      for (var i = 0; i < division_count; i++) {
+        // Blobを指定位置で指定長分割し、配列にセット(最終サイズをオーバーした場合は切り詰められる)
+        blobs.push(new Uint8Array(blob.slice(offset, offset + chunk_size)));
+        offset += chunk_size;
+      }
+    } catch (e) {
+      alert(e.message);
     }
+
+
     // 分割Blob返却
     return blobs;
   }
