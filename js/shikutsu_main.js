@@ -1218,7 +1218,6 @@ require([
 
                   // Blobデータを指定サイズで分割
                   var blobs = func_split_blob(blob, blob_chunk_size);
-                  return;
 
                   // 分割アップロード開始
                   upload_blobs(blobs, {
@@ -1430,7 +1429,7 @@ require([
       var blobs = new Array(division_count);
       for (var i = 0; i < division_count; i++) {
         // Blobを指定位置で指定長分割し、配列にセット(最終サイズをオーバーした場合は切り詰められる)
-        blobs.push(new Uint8Array(blob.slice(offset, offset + chunk_size)));
+        // blobs.push(new Uint8Array(blob.slice(offset, offset + chunk_size)));
         offset += chunk_size;
       }
     } catch (e) {
