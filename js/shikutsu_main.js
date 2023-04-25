@@ -1083,9 +1083,9 @@ require([
     //Screen Wake Lock APIの有効化（サポート端末のみ）
     try {
       wakeLock = await navigator.wakeLock.request("screen");
-      alert("Screen Wake Lock API Support!");
+      // alert("Screen Wake Lock API Support!");
     } catch (err) {
-      alert(`${err.name}, ${err.message}`);
+      // alert(`${err.name}, ${err.message}`);
     }
 
     callbacks = callbacks || {};
@@ -1429,7 +1429,7 @@ require([
     var blobs = new Array(division_count);
     for (var i = 0; i < division_count; i++) {
       // Blobを指定位置で指定長分割し、配列にセット(最終サイズをオーバーした場合は切り詰められる)
-      blobs.push(blob.slice(offset, offset + chunk_size));
+      blobs.push(new Uint8Array(blob.slice(offset, offset + chunk_size)));
       offset += chunk_size;
     }
     // 分割Blob返却
