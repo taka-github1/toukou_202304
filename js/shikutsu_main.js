@@ -1425,7 +1425,7 @@ require([
     // Blob分割数算出
     var division_count = Math.ceil(blob.byteLength / chunk_size);
     var offset = 0;
-    var blobs = new Array();
+    var blobs = new Array(division_count);
     for (var i = 0; i < division_count; i++) {
       // Blobを指定位置で指定長分割し、配列にセット(最終サイズをオーバーした場合は切り詰められる)
       blobs.push(blob.slice(offset, offset + chunk_size));
