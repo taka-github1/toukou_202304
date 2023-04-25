@@ -115,15 +115,18 @@ if (param != null) {
   $('#kaishaid').val(999999);
 }
 
-document.addEventListener('click', function () {
-  document.getElementById('sleep-prevent-video-ios').play();
-  document.getElementById('sleep-prevent-video-android').play();
-});
+var noSleep = new NoSleep();
 
-setInterval(function () {
-  document.getElementById('sleep-prevent-video-ios').play();
-  document.getElementById('sleep-prevent-video-android').play();
-}, 20000);  // 20秒ごと
+//端末のスリープ回避
+// document.addEventListener('click', function () {
+//   document.getElementById('sleep-prevent-video-ios').play();
+//   document.getElementById('sleep-prevent-video-android').play();
+// });
+
+// setInterval(function () {
+//   document.getElementById('sleep-prevent-video-ios').play();
+//   document.getElementById('sleep-prevent-video-android').play();
+// }, 20000);
 
 
 //configの読み込み
