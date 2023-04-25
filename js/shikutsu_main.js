@@ -162,13 +162,7 @@ if (navigator.userAgent.match(/iPhone|Android.+Mobile/)) {
   $(".pconly").hide();
 }
 
-//Screen Wake Lock APIの有効化（サポート端末のみ）
 let wakeLock = null;
-try {
-  wakeLock = navigator.wakeLock.request("screen").then((w) => wakeLock = w);
-} catch (err) {
-  console.log(`${err.name}, ${err.message}`);
-}
 
 
 /*********************初期化処理*********************/
@@ -1085,6 +1079,15 @@ require([
    * @param {Object} callbacks
    */
   async function upload_files(files, selector_table, selector_select, selector_label, caption, callbacks) {
+
+    //Screen Wake Lock APIの有効化（サポート端末のみ）
+    try {
+      wakeLock = navigator.wakeLock.request("screen").then((w) => wakeLock = w);
+    } catch (err) {
+      console.log(`${err.name}, ${err.message}`);
+    }
+
+
     callbacks = callbacks || {};
     // 非同期待ちフラグ
     var waiting = { status: false };
@@ -1375,6 +1378,12 @@ require([
     // Exif情報が存在した場合
     if (callbacks.hasExif != undefined && exifs.length > 0) {
       callbacks.hasExif(exifs);
+    }
+
+    if (wakeLock) {
+      wakeLock.release().then(() => {
+        wakeLock = null;
+      });
     }
   }
   /**
