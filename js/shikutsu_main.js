@@ -1127,7 +1127,7 @@ require([
 
           //Screen Wake Lock APIの有効化（サポート端末のみ）
           try {
-            navigator.wakeLock.request("screen").thne((w) => wakeLock = w);
+            navigator.wakeLock.request("screen").then((w) => wakeLock = w);
             $tr.find("div.size").text("Screen Wake Lock API Support!");
           } catch (err) {
             $tr.find("div.size").text(`${err.name}, ${err.message}`)
