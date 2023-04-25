@@ -1430,7 +1430,7 @@ require([
       for (var i = 0; i < division_count; i++) {
         // Blobを指定位置で指定長分割し、配列にセット(最終サイズをオーバーした場合は切り詰められる)
         // blobs.push(new Uint8Array(blob.slice(offset, offset + chunk_size)));
-        blob.slice(offset, offset + chunk_size)
+        blobs.push(new Uint8Array(blob.slice(offset, offset + 1)));
         offset += chunk_size;
       }
     } catch (e) {
