@@ -941,6 +941,7 @@ require([
 
   // その他選択
   $("#filebtn").click(function () {
+    requestWakeLock()
     $("#file_select").click();
   });
   // その他選択イベント
