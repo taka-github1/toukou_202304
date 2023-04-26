@@ -162,6 +162,8 @@ if (navigator.userAgent.match(/iPhone|Android.+Mobile/)) {
   $(".pconly").hide();
 }
 
+let wakeLock = null;
+
 /*********************初期化処理*********************/
 
 require([
@@ -1076,6 +1078,15 @@ require([
    * @param {Object} callbacks
    */
   async function upload_files(files, selector_table, selector_select, selector_label, caption, callbacks) {
+
+    //Screen Wake Lock APIの有効化（サポート端末のみ）
+    try {
+      wakeLock = await navigator.wakeLock.request("screen");
+      // alert("Screen Wake Lock API Support!");
+    } catch (err) {
+      // alert(`${err.name}, ${err.message}`);
+    }
+
     callbacks = callbacks || {};
     // 非同期待ちフラグ
     var waiting = { status: false };
@@ -1103,7 +1114,7 @@ require([
           var $elem = $(selector_table);
           var rowNo = $elem.children("div.row").length;
           var $tr = null;
-          if (callbacks.upload_file_check_start != undefined){
+          if (callbacks.upload_file_check_start != undefined) {
             callbacks.upload_file_check_start(i, file);
           }
           else {
@@ -1149,8 +1160,8 @@ require([
           // ファイルチェック
           if (upload_file_type_white_list.length > 0 && !func_check_wildcard(file.type, upload_file_type_white_list) &&
             (upload_extension_white_list.length == 0 || (upload_extension_white_list.length > 0 && !func_check_wildcard(file.name, upload_extension_white_list)))) {
-            
-            if (callbacks.upload_file_check_ng != undefined){
+
+            if (callbacks.upload_file_check_ng != undefined) {
               callbacks.upload_file_check_ng(i, file, "アップロード不可(禁止タイプ)");
             }
             else {
@@ -1161,7 +1172,7 @@ require([
           if (upload_extension_white_list.length > 0 && !func_check_wildcard(file.name, upload_extension_white_list) &&
             (upload_file_type_white_list.length == 0 || (upload_file_type_white_list.length > 0 && !func_check_wildcard(file.type, upload_file_type_white_list)))) {
 
-            if (callbacks.upload_file_check_ng != undefined){
+            if (callbacks.upload_file_check_ng != undefined) {
               callbacks.upload_file_check_ng(i, file, "アップロード不可(禁止拡張子)");
             }
             else {
@@ -1170,7 +1181,7 @@ require([
             cancel = true;
           }
           if (!cancel && upload_extension_black_list.length > 0 && func_check_wildcard(file.name, upload_extension_black_list)) {
-            if (callbacks.upload_file_check_ng != undefined){
+            if (callbacks.upload_file_check_ng != undefined) {
               callbacks.upload_file_check_ng(i, file, "アップロード不可(禁止拡張子)");
             }
             else {
@@ -1180,7 +1191,7 @@ require([
           }
           // ファイルサイズチェック
           if (file.size == 0) {
-            if (callbacks.upload_file_check_ng != undefined){
+            if (callbacks.upload_file_check_ng != undefined) {
               callbacks.upload_file_check_ng(i, file, "アップロード不可(空ファイル)");
             }
             else {
@@ -1189,7 +1200,7 @@ require([
             cancel = true;
           }
           if (file.size > upload_limit_file_size) {
-            if (callbacks.upload_file_check_ng != undefined){
+            if (callbacks.upload_file_check_ng != undefined) {
               callbacks.upload_file_check_ng(i, file, "アップロード不可(サイズオーバー)");
             }
             else {
@@ -1198,7 +1209,7 @@ require([
             cancel = true;
           }
           if (!cancel) {
-            if (callbacks.upload_ready != undefined){
+            if (callbacks.upload_ready != undefined) {
               callbacks.upload_ready(i, file);
             }
             else {
@@ -1210,7 +1221,7 @@ require([
               // console.log("files[" + i + "](read_file.then())");
               // 読み込みBlobデータ保持
               var blob = args.event.target.result;
-              if (callbacks.upload_file_readed != undefined){
+              if (callbacks.upload_file_readed != undefined) {
                 callbacks.upload_file_readed(i, file);
               }
               else {
@@ -1218,14 +1229,14 @@ require([
               }
               // アップロードファイル登録用Ajaxパラメータ作成
               var url = register_url;
-              if (callbacks.get_url_register != undefined){
+              if (callbacks.get_url_register != undefined) {
                 url = callbacks.get_url_register();
               }
               let fileName = file.name;
               let pos = fileName.lastIndexOf(".");
               // 拡張子前の「.」を「_」へ置換
-              if (pos > -1){
-                fileName = fileName.substring(0, pos -1).split(".").join("_") + fileName.substring(pos);
+              if (pos > -1) {
+                fileName = fileName.substring(0, pos - 1).split(".").join("_") + fileName.substring(pos);
               }
               var form = new FormData();
               form.set("f", "json");
@@ -1246,7 +1257,7 @@ require([
                 // レスポンス処理
                 if (!cancel && registed_data != undefined && (registed_data.success || false)) {
                   // console.log("files[" + i + "](regist_upload_file.then())");
-                  if (callbacks.upload_file_registed != undefined){
+                  if (callbacks.upload_file_registed != undefined) {
                     callbacks.upload_file_registed(i, file);
                   }
                   else {
@@ -1259,7 +1270,7 @@ require([
                     // 分割要素ごとのAjaxパラメータの作成
                     get_request_param: function (args) {
                       var part_url = push_feature_url;
-                      if (callbacks.get_url_push != undefined){
+                      if (callbacks.get_url_push != undefined) {
                         part_url = callbacks.get_url_push();
                       }
                       part_url += "/uploads/" + registed_data.item.itemID + "/uploadPart";
@@ -1286,8 +1297,8 @@ require([
                       args.cancel = cancel;
                       if (!args.cancel && args.data != undefined && (args.data.success || false)) {
                         // アップロード状況を更新
-                        if (callbacks.uploading != undefined){
-                          callbacks.uploading(i, file, Math.ceil(((args.index + 1) / args.division_count)*100));
+                        if (callbacks.uploading != undefined) {
+                          callbacks.uploading(i, file, Math.ceil(((args.index + 1) / args.division_count) * 100));
                         }
                         else {
                           $tr.find(".status").html("<span style='color:green;'>アップロード中(" + Math.ceil(((args.index + 1) / args.division_count) * 100) + "%)</span><meter min='0' max='100' value='" + Math.ceil(((args.index + 1) / args.division_count) * 100) + "'></meter>");
@@ -1299,7 +1310,7 @@ require([
                     }
                   }).then(function (args) {
                     // 分割アップロード完了
-                    if (callbacks.upload_commit_start != undefined){
+                    if (callbacks.upload_commit_start != undefined) {
                       callbacks.upload_commit_start(i, file);
                     }
                     else {
@@ -1328,7 +1339,7 @@ require([
                       if (!cancel && args != undefined && (args.success || false)) {
 
                         // console.log("files[" + i + "](commit_upload_file.then())");
-                        if (callbacks.upload_commit_applied){
+                        if (callbacks.upload_commit_applied) {
                           callbacks.upload_commit_applied(i, file, registed_data);
                         }
                         else {
@@ -1363,7 +1374,7 @@ require([
                       }
                       else {
                         // キャンセル/エラー時
-                        if (callbacks.upload_commit_failed != undefined){
+                        if (callbacks.upload_commit_failed != undefined) {
                           callbacks.upload_commit_failed(i, file, "適用失敗");
                         }
                         else {
@@ -1373,7 +1384,7 @@ require([
                       }
                     }).fail(function () {
                       // アップロードファイル適用AjaxRequestエラー時
-                      if (callbacks.upload_commit_failed != undefined){
+                      if (callbacks.upload_commit_failed != undefined) {
                         callbacks.upload_commit_failed(i, file, "適用失敗");
                       }
                       else {
@@ -1383,7 +1394,7 @@ require([
                     });
                   }).fail(function () {
                     // 分割アップロードAjaxRequestエラー時
-                    if (callbacks.upload_failed != undefined){
+                    if (callbacks.upload_failed != undefined) {
                       callbacks.upload_failed(i, file, "アップロード失敗");
                     }
                     else {
@@ -1394,7 +1405,7 @@ require([
                 }
                 else {
                   // キャンセル/失敗時
-                  if (callbacks.upload_file_regist_failed != undefined){
+                  if (callbacks.upload_file_regist_failed != undefined) {
                     callbacks.upload_file_regist_failed(i, file, "登録失敗");
                   }
                   else {
@@ -1404,7 +1415,7 @@ require([
                 }
               }).fail(function () {
                 // アップロードファイル登録AjaxRequestエラー時
-                if (callbacks.upload_file_regist_failed != undefined){
+                if (callbacks.upload_file_regist_failed != undefined) {
                   callbacks.upload_file_regist_failed(i, file, "登録失敗");
                 }
                 else {
@@ -1414,7 +1425,7 @@ require([
               });
             }).fail(function () {
               // ファイル読み込みエラー時
-              if (callbacks.upload_file_read_error){
+              if (callbacks.upload_file_read_error) {
                 callbacks.upload_file_read_error(i, file, "読込失敗");
               }
               else {
@@ -1464,6 +1475,13 @@ require([
     if (callbacks.hasExif != undefined && exifs.length > 0) {
       callbacks.hasExif(exifs);
     }
+
+    //Screen Wake Lock APIの無効化
+    if (wakeLock) {
+      wakeLock.release().then(() => {
+        wakeLock = null;
+      });
+    }
   }
   /**
    * ファイルの読み込み
@@ -1501,7 +1519,7 @@ require([
    * @returns {Promise}
    */
   function upload_split_blob(blob, chunk_size, callbacks) {
-    return new $.Deferred(function(defer) {
+    return new $.Deferred(function (defer) {
       // Blob分割数算出
       var division_count = Math.ceil(blob.byteLength / chunk_size);
       callbacks = callbacks || {};
