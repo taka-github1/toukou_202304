@@ -1471,12 +1471,7 @@ require([
     }
 
     //Screen Wake Lock APIの無効化
-    if (wakeLock) {
-      wakeLock.release()
-        .then(() => {
-          wakeLock = null;
-        })
-    }
+    releaseWakeLock();
   }
   /**
    * ファイルの読み込み
@@ -3143,21 +3138,21 @@ function clear_pass_form() {
   $("#warnDiv").html("");
 }
 
+//端末のスリープ回避　Screen Wake Lock APIの有効化（イベント処理直下から呼び出す）
 const requestWakeLock = async () => {
   try {
     wakeLock = await navigator.wakeLock.request('screen');
-
-    // // listen for our release event
-    // wakeLock.onrelease = function (ev) {
-    //   alert(ev);
-    // }
-    // wakeLock.addEventListener('release', () => {
-    //   // if wake lock is released alter the button accordingly
-    //   alert('released');
-    // });
-
   } catch (err) {
-    // if wake lock request fails - usually system related, such as battery
     console.log(`${err.name}, ${err.message}`);
+  }
+}
+
+//Screen Wake Lock APIの無効化
+const releaseWakeLock = () => {
+  if (wakeLock) {
+    wakeLock.release()
+      .then(() => {
+        wakeLock = null;
+      })
   }
 }
