@@ -941,7 +941,7 @@ require([
 
   // その他選択
   $("#filebtn").click(function () {
-    requestWakeLock()
+
     $("#file_select").click();
   });
   // その他選択イベント
@@ -1081,6 +1081,7 @@ require([
    * @param {Object} callbacks
    */
   async function upload_files(files, selector_table, selector_select, selector_label, caption, callbacks) {
+    requestWakeLock()
     callbacks = callbacks || {};
     // 非同期待ちフラグ
     var waiting = { status: false };
