@@ -3145,8 +3145,6 @@ function clear_pass_form() {
 }
 
 const requestWakeLock = async () => {
-  if (wakeLock == null) return;
-
   try {
     wakeLock = await navigator.wakeLock.request('screen');
 
