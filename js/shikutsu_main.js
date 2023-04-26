@@ -3148,7 +3148,7 @@ const requestWakeLock = async () => {
   try {
     wakeLock = await navigator.wakeLock.request('screen');
 
-    alert(wakeLock)
+    alert(`${wakeLock.type} ${wakeLock.released}`)
     // listen for our release event
     wakeLock.onrelease = function (ev) {
       alert(ev);
