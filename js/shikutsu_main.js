@@ -946,6 +946,7 @@ require([
   });
   // その他選択イベント
   $("#file_select").change(function () {
+    requestWakeLock()
     // ファイル選択
     upload_files(this.files, "#file_table", "#file_select", "#file_label", "ファイル", {
       // Exif情報処理
