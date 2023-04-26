@@ -1314,6 +1314,7 @@ require([
                       callbacks.upload_commit_start(i, file);
                     }
                     else {
+                      sleep(5000);
                       $tr.find(".status").html("<span style='color:blue;'>適用中</span>");
                     }
                     var url = push_feature_url;
