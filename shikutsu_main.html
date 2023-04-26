@@ -4,8 +4,6 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta http-equiv="Cache-Control" content="no-cache">
-  <meta http-equiv="Permissions-Policy" content="screen-wake-lock *">
   <link rel="shortcut icon" href="./src/favicon.ico" type="image/vnd.microsoft.icon" />
   <link rel="icon" href="./src/favicon.ico" type="image/vnd.microsoft.icon" />
   <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/css/main.css" />
@@ -13,10 +11,6 @@
   <link rel="stylesheet" href="./css/shikutsu_main.css" />
   <title>掘削状況3D管理アプリ　ちかデジ</title>
 </head>
-
-
-
-
 
 <body>
   <!--ヘッダーサインアウトボタン-->
@@ -34,45 +28,114 @@
   </div>
   <!--メイン画面-->
   <div id="mainDiv">
-    <div class="kaigyo">
-      <label class="sys-change-content">動画を投稿する</label><br />
-      <button id="show_form" class="esri-icon-edit">投稿する</button><br />
-      <button id="show_help" class="esri-icon-question commonbtn">ご利用ガイド</button>
-    </div>
-    <div class="white-space-wrap"><label class="sys-change-content">過去の投稿を確認する</label></div>
-    <input type="radio" name="history" id="history-list" value="history-list" checked />
-    <label for="history-list" class="radiomenu">リスト</label>
-    <input type="radio" name="history" id="history-map" value="history-map" />
-    <label for="history-map" class="radiomenu">マップ</label>
-    <div id="historyListDiv">
-      <div class="tool-menu">
-        <span>並べ替え：</span>
-        <select id="select_order"></select>
-      </div>
-      <table class="history-table tbl-r05">
-        <thead class="toko-thead" id="tableHead"></thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-      <div class="foot-menu">
-        <button id="btn_first" class="esri-icon-beginning"></button>
-        <button id="btn_prev" class="esri-icon-reverse"></button>
-        <span></span><!-- これが必要なのか確認いらなさそう -->
-        <button id="btn_next" class="esri-icon-forward"></button>
-        <button id="btn_last" class="esri-icon-end"></button>
-      </div>
-    </div>
-    <!--投稿確認用マップ-->
-    <div id="historyMapDiv">
-      <div id="historyMapViewDiv"></div>
-    </div>
-    <div class="kaigyo">
-      <label>ユーザー設定を変更する</label><br />
-      <button id="change-conf" class="esri-icon-settings">変更する</button>
-    </div>
-    <div class="kaigyo">
-      <label>パスワードを変更する</label><br />
-      <button id="change-password" class="esri-icon-key">変更する</button>
-    </div>
+    <calcite-tabs position="bottom" layout="center">
+      <calcite-tab-nav slot="title-group">
+        <calcite-tab-title icon-start="video-plus" selected>動画<br/>投稿</calcite-tab-title>
+        <calcite-tab-title icon-start="attachment-plus">ファイル<br/>共有</calcite-tab-title>
+        <calcite-tab-title icon-start="gear">設定</calcite-tab-title>
+      </calcite-tab-nav>
+      <calcite-tab>
+        <div class="kaigyo">
+          <label class="sys-change-content">動画を投稿する</label><br />
+          <button id="show_form" class="esri-icon-edit">投稿する</button><br />
+          <button id="show_help" class="esri-icon-question commonbtn">ご利用ガイド</button>
+        </div>
+        <div class="white-space-wrap"><label class="sys-change-content">過去の投稿を確認する</label></div>
+        <input type="radio" name="history" id="history-list" value="history-list" checked />
+        <label for="history-list" class="radiomenu">リスト</label>
+        <input type="radio" name="history" id="history-map" value="history-map" />
+        <label for="history-map" class="radiomenu">マップ</label>
+        <div id="historyListDiv">
+          <div class="tool-menu">
+            <span>並べ替え：</span>
+            <select id="select_order"></select>
+          </div>
+          <table class="history-table tbl-r05">
+            <thead class="toko-thead" id="tableHead"></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+          <div class="foot-menu">
+            <button id="btn_first" class="esri-icon-beginning"></button>
+            <button id="btn_prev" class="esri-icon-reverse"></button>
+            <span></span><!-- これが必要なのか確認いらなさそう -->
+            <button id="btn_next" class="esri-icon-forward"></button>
+            <button id="btn_last" class="esri-icon-end"></button>
+          </div>
+        </div>
+        <!--投稿確認用マップ-->
+        <div id="historyMapDiv">
+          <div id="historyMapViewDiv"></div>
+        </div>
+      </calcite-tab>
+      <calcite-tab>
+        <div class="upload-attachment">
+          <div class="kaigyo">
+            <label class="sys-change-content">ファイルをアップロードする</label><br />
+            <button id="upload_attachment" class="esri-icon-edit">アップロード</button>
+            <span>※統合用図面データ等はこちら</span>
+            <input id="attachment_file" type="file" multiple hidden />
+          </div>
+          <div id="attachment_list_user">
+            <label class="sys-change-content">ユーザー アップロード</label><br />
+            <table class="history-table tbl-r05">
+              <thead class="toko-thead">
+                <tr>
+                  <th>ファイル名</th>
+                  <th>アップロード日時</th>
+                  <th>利用者ID</th>
+                  <th>確認</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>座標一覧表.xlsx</td>
+                  <td>2023/03/15 15:00</td>
+                  <td>esri_tky_c01_e01​</td>
+                  <td><input type="button" value="ダウンロード" /><input type="button" value="削除" /></td>
+                </tr>
+                <tr>
+                  <td>全体構内図.dwg</td>
+                  <td>2023/03/14 12:00</td>
+                  <td>esri_tky_c01</td>
+                  <td><input type="button" value="ダウンロード" /><input type="button" value="削除" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="admin_attachment_list" class="m-t-10">
+            <label class="sys-change-content">ジオ・サーチ アップロード</label><br />
+            <table class="history-table tbl-r05">
+              <thead class="toko-thead">
+                <tr>
+                  <th>ファイル名</th>
+                  <th>アップロード日時</th>
+                  <th>利用者ID</th>
+                  <th>確認</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>全体構内図_CAD+LAS.zip​</td>
+                  <td>2023/04/01 09:00</td>
+                  <td>shikutsu_kun</td>
+                  <td><input type="button" value="ダウンロード" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </calcite-tab>
+      <calcite-tab>
+        <div class="kaigyo">
+          <label>ユーザー設定を変更する</label><br />
+          <button id="change-conf" class="esri-icon-settings">変更する</button>
+        </div>
+        <div class="kaigyo">
+          <label>パスワードを変更する</label><br />
+          <button id="change-password" class="esri-icon-key">変更する</button>
+        </div>
+      </calcite-tab>
+    </calcite-tabs>
   </div>
   <!--ユーザー設定画面-->
   <div id="user_conf">

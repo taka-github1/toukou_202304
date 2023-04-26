@@ -678,7 +678,7 @@ td {
     padding-bottom: 5px;
   }
   .history-table td:first-child {
-    background: #e9727e;
+    background: #4472C4;
     color: #fff;
     font-weight: bold;
     text-align: left;
@@ -887,5 +887,92 @@ textarea#viewnaiyo {
     width: calc(100% - 320px);
     border-bottom: 0px;
     border-right: 1px solid #CCCCCC;
+  }
+}
+
+/*  */
+#upload_attachment {
+  width: 60%;
+  min-width: 150px;
+  font-size: 24px;
+  margin: 35px;
+  margin-bottom: 15px;
+  border-radius: 25px;
+  height:120px;
+  margin-top: 50px;
+}
+
+.m-t-10 {
+  margin-top: 10px;
+}
+.upload-attachment thead tr th:nth-child(2),
+.upload-attachment thead tr th:nth-child(3),
+.upload-attachment thead tr th:nth-child(4) {
+  width: 150px;
+}
+
+#mainDiv {
+  padding-bottom: 50px;
+}
+
+calcite-tabs calcite-tab-nav {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  z-index: 1000;
+  background-color:#B2DFEE;
+}
+
+.file-list .row:nth-child(1) div {
+  background-color: #4472C4;
+  color:rgba(255, 255, 255, 1);
+}
+.file-list .row:nth-child(n+2) > div {
+  background-color:rgba(255, 255, 255, 1);
+}
+.file-list .row:nth-child(1) div,
+.file-list .row .file-name > div,
+.file-list .row .upload-date > div,
+.file-list .row .userid > div,
+.file-list .row .confirm > div {
+  padding: 4px;
+}
+.file-list .row .file-name {
+  width: calc(100% - 450px);
+}
+.file-list .row .upload-date {
+  width: 150px;
+}
+.file-list .row .userid {
+  width: 150px;
+}
+.file-list .row .confirm {
+  width: 150px;
+}
+.file-list .row div > .title {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .file-list .row:nth-child(1) {
+    display: none;
+  }
+  .file-list .row .file-name {
+    font-weight: bold;
+  }
+  .file-list .row > div {
+    width: 100% !important;
+  }
+  .file-list .row div > .title {
+    width: 140px;
+    display: block;
+  }
+  .file-list .row div > .value {
+    width: calc(100% - 140px);
+    word-wrap: break-word;
+  }
+  .file-list .row > div:nth-child(1){
+    background-color: #4472C4;
+    color:rgba(255, 255, 255, 1);
   }
 }
