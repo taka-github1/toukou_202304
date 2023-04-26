@@ -824,11 +824,13 @@ require([
 
   //添付ファイルの追加
   $('#addattachment').click(function () {
+    requestWakeLock();
     $('#addattachment-select').click();
   });
 
   // 添付ファイルの追加
   $('#addattachment-select').change(function () {
+    requestWakeLock()
     append_attachment_file($('#viewobjectid').val(), this.files);
   });
 
@@ -1078,15 +1080,6 @@ require([
    * @param {Object} callbacks
    */
   async function upload_files(files, selector_table, selector_select, selector_label, caption, callbacks) {
-
-    //Screen Wake Lock APIの有効化（サポート端末のみ）
-    try {
-      wakeLock = await navigator.wakeLock.request("screen");
-      // alert("Screen Wake Lock API Support!");
-    } catch (err) {
-      // alert(`${err.name}, ${err.message}`);
-    }
-
     callbacks = callbacks || {};
     // 非同期待ちフラグ
     var waiting = { status: false };
@@ -1479,9 +1472,10 @@ require([
 
     //Screen Wake Lock APIの無効化
     if (wakeLock) {
-      wakeLock.release().then(() => {
-        wakeLock = null;
-      });
+      wakeLock.release()
+        .then(() => {
+          wakeLock = null;
+        })
     }
   }
   /**
@@ -3147,4 +3141,26 @@ function clear_pass_form() {
   $("#new-password").val("");
   $("#retype-password").val("");
   $("#warnDiv").html("");
+}
+
+const requestWakeLock = async () => {
+  if (wakeLock == null) return;
+
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+
+    // listen for our release event
+    wakeLock.onrelease = function (ev) {
+      alert(ev);
+    }
+    wakeLock.addEventListener('release', () => {
+      // if wake lock is released alter the button accordingly
+      alert('released');
+    });
+
+  } catch (err) {
+    // if wake lock request fails - usually system related, such as battery
+    alert(`${err.name}, ${err.message}`);
+
+  }
 }
